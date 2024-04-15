@@ -10,7 +10,7 @@ class CellState(Enum):
 
 class Cell:
     def __init__(self):
-        if random.random() <= 0.9:
+        if random.random() <= 0.96:
             self.state = CellState.DEAD
         else:
             self.state = CellState.ALIFE

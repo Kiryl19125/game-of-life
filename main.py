@@ -2,11 +2,10 @@ import dearpygui.dearpygui as dpg
 from models import *
 import time
 
-step = 15
+step = 5
 
-rows = 70
-cols = 40
-
+rows = 180
+cols = 180
 
 game_board = GameBoard(rows, cols)
 delay_between_steps = 0
@@ -18,9 +17,11 @@ def __draw_board(board: GameBoard, step: int) -> None:
         col_number = 0
         for j in range(step, board.cols * step, step):
             if board.board[row_number][col_number].state == CellState.DEAD:
-                dpg.draw_rectangle(pmin=(i, j), pmax=(i + step, j + step), fill=(38, 34, 34), parent=Tag.draw_list)
+                dpg.draw_rectangle(pmin=(i, j), pmax=(i + step, j + step), fill=(0, 0, 0), color=(162, 166, 166),
+                                   parent=Tag.draw_list)
             else:
-                dpg.draw_rectangle(pmin=(i, j), pmax=(i + step, j + step), fill=(74, 205, 217), parent=Tag.draw_list)
+                dpg.draw_rectangle(pmin=(i, j), pmax=(i + step, j + step), fill=(12, 210, 232), color=(162, 166, 166),
+                                   parent=Tag.draw_list)
             col_number += 1
         row_number += 1
 
@@ -58,7 +59,7 @@ if __name__ == '__main__':
     dpg.add_drawlist(tag=Tag.draw_list, width=game_board.cols * step, height=game_board.rows * step,
                      parent=Tag.child_window)
 
-    dpg.create_viewport(title='Custom Title')
+    dpg.create_viewport(title='The Game of Life', width=1000, height=1000)
     dpg.setup_dearpygui()
     dpg.show_viewport()
     dpg.set_primary_window(Tag.main_window, True)
