@@ -1,47 +1,26 @@
 import dearpygui.dearpygui as dpg
-from enum import Enum
-from typing import List
+from models import *
 
 
 class Tag:
     main_window = "main_window"
 
 
-class CellState(Enum):
-    ALIFE = 1
-    DEAD = 0
+step = 15
+game_board = GameBoard(rows=50, cols=50)
 
 
-class Cell:
-    def __init__(self):
-        self.state = CellState.DEAD
-
-
-class GameBoard:
-
-    def __init__(self, rows: int, cols: int):
-        self.rows = rows
-        self.cols = cols
-        self.board = [[Cell()] * cols] * rows
-
-
-Matrix = List[List[Cell]]
-Vector = List[Cell]
-
-step = 20
-
-game_board = GameBoard(rows=10, cols=10)
-
-
-def draw_board() -> None:
-    for i in range(0, game_board.rows * step, step):
-        for j in range(0, game_board.cols * step, step):
-            dpg.draw_rectangle(pmin=(i, j), pmax=(i + step, j + step))
-
-
-def show_board(board: GameBoard) -> None:
-    for row in board.board:
-        print([cell.state.value for cell in row])
+def draw_board(board: GameBoard, step: int) -> None:
+    row_number = 0
+    for i in range(step, board.rows * step, step):
+        col_number = 0
+        for j in range(step, board.cols * step, step):
+            if board.board[row_number][col_number].state == CellState.DEAD:
+                dpg.draw_rectangle(pmin=(i, j), pmax=(i + step, j + step), fill=(38, 34, 34))
+            else:
+                dpg.draw_rectangle(pmin=(i, j), pmax=(i + step, j + step), fill=(74, 205, 217))
+            col_number += 1
+        row_number += 1
 
 
 if __name__ == '__main__':
@@ -50,9 +29,9 @@ if __name__ == '__main__':
     with dpg.window(tag=Tag.main_window):
         with dpg.child_window(width=-2, height=-2):
             with dpg.drawlist(width=game_board.cols * step, height=game_board.rows * step):
-                draw_board()
+                draw_board(game_board, step)
 
-    show_board(game_board)
+    game_board.scan_board()
 
     dpg.create_viewport(title='Custom Title', width=800, height=600)
     dpg.setup_dearpygui()
